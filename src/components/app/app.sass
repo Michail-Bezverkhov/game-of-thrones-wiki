@@ -1,8 +1,22 @@
 .toggle-random-char
-    margin-bottom: 40px
     padding: 10px
     border-radius: 10px
     background-color: white
     transition: all 0.3s ease-in-out
     &:hover
         text-decoration: underline
+.app
+    overflow-x: hidden
+    background: url('/assets/img/got.jpeg') center center no-repeat
+    background-size: cover
+    font-size: 16px
+    height: 100vh
+
+.random-block h4
+    font-size: 20px
+
+@media (max-width: 550px)
+    .app
+        font-size: 10px
+    .random-block h4
+        font-size: 12px    

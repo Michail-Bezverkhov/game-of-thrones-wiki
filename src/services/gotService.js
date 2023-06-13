@@ -10,7 +10,7 @@ export default class GotService {
         if (!res.ok) {
             throw new Error(`Could not fetch ${url}, status: ${res.status}`)
         }
-
+        
         return await res.json();
     }
     getAllCharacters = async () => {
@@ -22,7 +22,7 @@ export default class GotService {
         return this._transformCharacter(character);
     }
     getAllHouses = async () => {
-        const res = await this.getResource('/houses/');
+        const res = await this.getResource('/houses');
         return res.map(this._transformHouse);
     }
     getHouse = async (id) => {
@@ -34,7 +34,7 @@ export default class GotService {
         return res.map(this._transformBook);
     }
     getBook = async (id) => {
-        const book = await this.getResource(`/books/${id}/`);
+        const book = await this.getResource(`/books/${id}`);
         return this._transformBook(book);
     }
 
@@ -53,22 +53,30 @@ export default class GotService {
     }
 
     _transformHouse = (house) =>{
+
+        const id = house.url.match(/\/houses\/(\d+)/)[1];
+
         return {
-            name: house.name,
-            region: house.region,
-            words: house.words,
-            titles: house.titles,
-            overlord: house.overlord,
-            ancestralWeapons: house.ancestralWeapons,
+            id: id,
+            name: house.name || 'no data',
+            region: house.region || 'no data',
+            words: house.words || 'no data',
+            titles: house.titles[0] || 'no data',
+            overlord: house.overlord || 'no data',
+            ancestralWeapons: house.ancestralWeapons[0] || 'no data',
         }
     }
 
     _transformBook = (book) => {
+
+        const id = book.url.match(/\/books\/(\d+)/)[1];
+
         return {
-            name: book.name,
-            numberOfPages: book.numberOfPages,
-            publiser: book.publiser,
-            released: book.released
+            id: id,
+            name: book.name || 'no data',
+            numberOfPages: book.numberOfPages || 'no data',
+            publisher: book.publisher || 'no data',
+            released: book.released.match(/^(\d{4}-\d{2}-\d{2})/)[1] || 'no data'
         }
     }
 }

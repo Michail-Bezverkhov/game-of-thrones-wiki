@@ -1,100 +1,71 @@
-import { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './randomChar.sass';
 import GotService from '../../services/gotService';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
+import ItemDetails, { Field } from '../itemDetails/itemDetails';
 
-export default class RandomChar extends Component {
+const RandomChar = ({ interval }) => {
 
-    gotService = new GotService();
+    const gotService = new GotService();
+    const [item, setItem] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-    state = {
-        char: {},
-        loading: true,
-        error: false
-    }
+    const onItemLoaded = (item) => {
+        setItem(item);
+        setLoading(false);
+    };
 
-    componentDidMount() {
-        this.updateChar();
-        // this.timerId = setInterval(this.updateChar, 1500);
-    }
+    const onError = (error) => {
+        console.log(error);
+        setError(true);
+        setLoading(false);
+    };
 
-    // componentWillUnmount() {
-    //     clearInterval(this.timerId);
-    // }
-
-    onCharLoaded = (char) => {
-        this.setState({
-            char,
-            loading: false
-        });
-
-    }
-
-    onError = (err) => {
-        this.setState({
-            error: true,
-            loading: false,
-
-        })
-    }
-
-    updateChar = () => {
-
+    const updateChar = () => {
         const id = Math.floor(Math.random() * 140 + 25);
 
-
-        this.gotService.getCharacter(id)
-            .then(this.onCharLoaded)
-            .catch(this.onError);
+        gotService
+            .getCharacter(id)
+            .then(onItemLoaded)
+            .catch(onError);
     }
 
-    render() {
+    useEffect(() => {
+        updateChar();
+        const timerId = setInterval(updateChar, interval);
 
-        const { char, loading, error } = this.state;
+        return () => {
+            clearInterval(timerId);
+        };
+    }, [])
 
-        const errorMessage = error ? <ErrorMessage /> : null;
+    const itemDetails = (
+        <ItemDetails
+            itemId={item.id}
+            getItemData={gotService.getCharacter}>
+            <Field field='gender' label='Gender' />
+            <Field field='born' label='Born' />
+            <Field field='died' label='Died' />
+            <Field field='culture' label='Culture' />
+        </ItemDetails >
+    )
 
-        const spinner = loading ? <Spinner /> : null;
+    const errorMessage = error ? <ErrorMessage /> : null;
 
-        const content = !(loading || error) ? <View char={char} /> : null;
+    const spinner = loading ? <Spinner /> : null;
 
-        return (
-            <div className="random-block rounded">
-                {errorMessage}
-                {spinner}
-                {content}
-            </div>
-        );
-    }
-}
-
-
-const View = ({ char }) => {
-
-    const { name, gender, born, died, culture } = char;
+    const content = !(loading || error) ? itemDetails : null;
 
     return (
         <>
-            <h4>Random Character: {name}</h4>
-            <ul className="list-group list-group-flush">
-                <li className="list-group-item d-flex justify-content-between">
-                    <span className="term">Gender </span>
-                    <span>{gender}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                    <span className="term">Born </span>
-                    <span>{born}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                    <span className="term">Died </span>
-                    <span>{died}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                    <span className="term">Culture </span>
-                    <span>{culture}</span>
-                </li>
-            </ul>
+            {errorMessage}
+            <h3 className='randomchar-header'>Random Character:</h3>
+            {spinner}
+            {content}
         </>
-    )
-}
+    );
+};
+
+export default RandomChar;

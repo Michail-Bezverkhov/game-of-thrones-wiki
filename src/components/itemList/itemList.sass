@@ -1,6 +1,17 @@
 .item-list
-    background-color: #fff
-    width: 100%
-    
-    &.list-group-item
+    background-color: black
+
+ul .list-group-item
     cursor: pointer
+    display: flex
+    justify-content: space-between
+    &:hover
+        background-color: #ffc107
+
+.prompt
+    display: none
+
+.list-group-item:hover
+    .prompt
+        display: block
+        color: #ab8a28

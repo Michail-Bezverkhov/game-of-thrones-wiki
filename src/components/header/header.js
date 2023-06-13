@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const HeaderBlock = styled.div`
     display: flex;
@@ -11,6 +12,12 @@ const HeaderTitle = styled.h3`
     font-size: 24px;
     color: #fff;
     margin: 0;
+    :hover {
+        color: #ffc107;
+    }
+    @media (max-width: 550px) {
+        font-size: 12px;
+    }
 `;
 
 const HeaderLinks = styled.ul`
@@ -23,25 +30,34 @@ const HeaderLinks = styled.ul`
         margin-right: 20px;
         font-size: 18px;
     }
+    @media (max-width: 550px) {
+        li {
+        margin-right: 10px;
+        font-size: 10px;
+        }
+    }
+    a:hover {
+        color: #ffc107;
+    }
 `;
 
 const Header = () => {
     return (
         <HeaderBlock>
             <HeaderTitle>
-                <a href="$">
-                    Game of Thrones DB
-                </a>
+                <Link to='/'>
+                    Game of Thrones
+                </Link>
             </HeaderTitle>
             <HeaderLinks>
                 <li>
-                    <a href="$">Characters</a>
+                    <Link to='/characters/'>Characters</Link>
                 </li>
                 <li>
-                    <a href="$">Houses</a>
+                    <Link to='/houses/'>Houses</Link>
                 </li>
                 <li>
-                    <a href="$">Books</a>
+                    <Link to='/books/'>Books</Link>
                 </li>
             </HeaderLinks>
         </HeaderBlock>

@@ -11,6 +11,7 @@ export default class ItemList extends Component {
     }
 
     componentDidMount() {
+
         const { getData } = this.props;
 
         getData()
@@ -28,18 +29,20 @@ export default class ItemList extends Component {
         })
     }
 
-
-
     renderItems(arr) {
         return arr.map((item) => {
-            const {id} = item;
+            const { id } = item;
             const label = this.props.renderItem(item);
             return (
                 <li
                     key={id}
                     className="list-group-item"
                     onClick={() => this.props.onItemSelected(id)}>
-                    {label}
+                    <span>{label}</span>
+                    <span
+                        className="prompt">
+                        Click to select
+                    </span>
                 </li>
             )
         })
@@ -51,10 +54,10 @@ export default class ItemList extends Component {
             return <ErrorMessage />
         }
 
-        const {itemList} = this.state;
+        const { itemList } = this.state;
 
         if (!itemList) {
-            return <Spinner/>
+            return <Spinner />
         }
 
         const items = this.renderItems(itemList);

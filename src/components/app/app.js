@@ -1,85 +1,55 @@
-import { Component } from 'react';
+import React, { useState } from 'react';
 import { Col, Row, Container } from 'reactstrap';
 import './app.sass'
-import ItemList from '../itemList/itemList';
-import CharDetails from '../charDetails/charDetails';
 import Header from '../header/header';
 import RandomChar from '../randomChar/randomChar';
-import ErrorMessage from '../errorMessage/errorMessage';
-import CharacterPage from '../characterPage/characterPage';
-import GotService from '../../services/gotService';
+import CharactersPage from '../pages/charactersPage';
+import HousePage from '../pages/housesPage';
+import HousesItem from '../pages/housesItem';
+import BooksPage from '../pages/booksPage';
+import BooksItem from '../pages/booksItem';
+import CharactersItem from '../pages/charactersItem';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-export default class App extends Component {
+function App() {
 
-    gotService = new GotService();
+    const [randomCharVisible, setRandomCharVisible] = useState(true);
 
-    state = {
-        randomCharVisible: true,
-        error: false
-    }
-
-    componentDidCatch() {
-        console.log('error');
-        this.setState({
-            error: true
-        })
-    }
-
-    ToggleFunction = () => {
-        this.setState(prevState => ({
-            randomCharVisible: !prevState.randomCharVisible
-        }));
+    const toggleFunction = () => {
+        setRandomCharVisible(!randomCharVisible);
     };
 
-    render() {
+    const content = randomCharVisible ? <RandomChar interval={5000} /> : null;
 
-        if (this.state.error) {
-            return <ErrorMessage />
-        }
-
-        const { randomCharVisible } = this.state;
-
-        const content = randomCharVisible ? <RandomChar /> : null;
-
-        return (
-            <>
+    return (
+        <Router basename="/game-of-thrones-wiki">
+            <div className='app'>
                 <Container>
                     <Header />
                 </Container>
                 <Container>
-                    <Row>
-                        <Col lg={{ size: 5, offset: 0 }}>
-                            {content}
-                            <button className="toggle-random-char" onClick={this.ToggleFunction}>Toggle Random Character</button>
-                        </Col>
-                    </Row>
-                    <CharacterPage />
-                    <Row>
-                        <Col md='6'>
-                            <ItemList
-                                onItemSelected={this.onItemSelected}
-                                getData={this.gotService.getAllBooks}
-                                renderItem={(item) => (<><span>{item.name}</span><button>click me</button></>)}
-                            />
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails charId={this.state.selectedChar} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList
-                                onItemSelected={this.onItemSelected}
-                                getData={this.gotService.getAllHouses}
-                                renderItem={(item) => item.name}
-                            />
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails charId={this.state.selectedChar} />
-                        </Col>
-                    </Row>
+                    <Routes>
+                        <Route index path='/'
+                            element={
+                                <Row>
+                                    <Col lg={{ size: 6, offset: 0 }}>
+                                        {content}
+                                        <button className="toggle-random-char" onClick={toggleFunction}>Toggle Random Character</button>
+                                    </Col>
+                                </Row>
+                            }>
+                        </Route>
+                        <Route path='/characters/' element={<CharactersPage />} />
+                        <Route path='/characters/:itemId' element={<CharactersItem />} />
+                        <Route path='/houses/' element={<HousePage />} />
+                        <Route path='/houses/:itemId' element={<HousesItem />} />
+                        <Route path='/books/' exact element={<BooksPage />} />
+                        <Route path='/books/:itemId' element={<BooksItem />} />
+                    </Routes>
                 </Container>
-            </>
-        )
-    }
+            </div>
+        </Router>
+    )
 }
+
+export default App;
