@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/game-of-thrones-wiki/static/css/main.614d739f.css",
-    "main.js": "/game-of-thrones-wiki/static/js/main.5d534593.js",
+    "main.js": "/game-of-thrones-wiki/static/js/main.a08f0c46.js",
     "static/media/got.jpeg": "/game-of-thrones-wiki/static/media/got.05c72a0d7d6c265d491b.jpeg",
     "static/media/error.jpg": "/game-of-thrones-wiki/static/media/error.ce293654fc5b055593cf.jpg",
     "index.html": "/game-of-thrones-wiki/index.html",
     "main.614d739f.css.map": "/game-of-thrones-wiki/static/css/main.614d739f.css.map",
-    "main.5d534593.js.map": "/game-of-thrones-wiki/static/js/main.5d534593.js.map"
+    "main.a08f0c46.js.map": "/game-of-thrones-wiki/static/js/main.a08f0c46.js.map"
   },
   "entrypoints": [
     "static/css/main.614d739f.css",
-    "static/js/main.5d534593.js"
+    "static/js/main.a08f0c46.js"
   ]
 }
